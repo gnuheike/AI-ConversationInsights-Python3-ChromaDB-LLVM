@@ -213,6 +213,7 @@ Query set processed. Processed 55/55 questions. Results saved to couple_results_
 ```
 
 The output file will contain:
+
 - The title and description of the query set
 - The date of analysis
 - Each question followed by its answer
@@ -288,18 +289,3 @@ Contributions are welcome! If you'd like to improve Telegram Analyzer, please:
 4. Submit a pull request
 
 For bug reports, feature requests, or questions, please open an issue in the repository.
-
-## Improvements
-
-This application has been refactored following modern Python practices:
-
-1. **Modular Architecture**: Code organized into logical modules with clear responsibilities
-2. **Type Hints**: All functions and methods include type annotations
-3. **Comprehensive Documentation**: Docstrings for all modules, classes, and functions
-4. **Error Handling**: Robust error handling throughout the codebase
-5. **Logging**: Proper logging instead of print statements
-6. **Command-line Interface**: Well-structured CLI with subcommands and help text
-7. **Configuration Management**: Centralized configuration with sensible defaults
-8. **Batch Processing**: Support for processing multiple questions
-9. **Performance Metrics**: Timing and metadata for performance analysis
-10. **Code Quality**: Adherence to PEP 8 style guidelines
