@@ -1,8 +1,15 @@
+![Telegram Analyze](https://raw.githubusercontent.com/gnuheike/llvm_telegram_analyzer/refs/heads/main/logo.jpg "Telegram Analyzer")
+
 # Telegram Analyzer
 
-Python application for analyzing Telegram chat messages using ChromaDB and LLMs.
-Application IS INTENDED TO USE AT THE LOCAL ENVIRONMENT, without sending data to ANY cloud providers ensuring security and confidentiality of the private
-conversatoin and sensitive questions.
+A Python application for analyzing Telegram chat messages using ChromaDB and LLMs. This tool analyzes Telegram chat exports to answer questions about
+conversation patterns using embeddings and locally-run LLMs.
+
+## Project Purpose
+
+Telegram Analyzer is designed to help users extract insights from their Telegram conversations without compromising privacy. It processes JSON exports of
+Telegram chats, stores them in a vector database (ChromaDB), and allows users to ask natural language questions about the content. The tool runs entirely
+locally, ensuring that sensitive conversation data never leaves your machine.
 
 ## Overview
 
@@ -13,11 +20,20 @@ Telegram Analyzer is a tool that allows you to:
 3. Query the database to ask questions about the conversation
 4. Generate answers using Ollama LLM models
 
+## Features
+
+- **Semantic Search**: Uses embeddings to find relevant messages based on meaning, not just keywords
+- **Local Execution**: Runs entirely on your machine with no data sent to external services
+- **Batch Processing**: Process multiple questions at once for efficient analysis
+- **Customizable Models**: Works with various Ollama models to balance speed and accuracy
+- **Privacy-Focused**: Designed with data privacy as a core principle
+- **Detailed Output**: Provides answers with metadata about processing time and relevant message count
+
 ## How to use
 
-1. Export your telegram messages to the result.json file (click 3 dots in the telegram chat, export messages to json without any attachments)
-2. Process messages to store the vectors to ChromaDB (Loading Data in this readme)
-3. Use LLVM to query the messages (examples in the queries folder) using the chromaDB as context (Querying is this readme)
+1. Export your Telegram messages to a JSON file (click 3 dots in the Telegram chat, export messages to JSON without any attachments)
+2. Process messages to store the vectors in ChromaDB (see "Loading Data" section below)
+3. Use LLMs to query the messages using ChromaDB as context (see "Querying" section below)
 
 ## Installation
 
@@ -60,24 +76,69 @@ The application provides a command-line interface with several commands:
 
 ### Loading Data
 
-Load Telegram messages from a JSON export file into ChromaDB:
+To load Telegram messages from a JSON export file into ChromaDB:
 
 ```bash
-python main.py load result.json
+python main.py load result.json --collection my_chat --batch-size 1000
+```
+
+This will process the messages in batches of 1000 and store them in a ChromaDB collection named "my_chat". The process includes:
+
+1. Parsing the JSON file to extract messages
+2. Converting messages to embeddings using a sentence transformer model
+3. Storing the embeddings and original messages in ChromaDB for semantic search
+
+You'll see progress logs as the data is processed, and a final confirmation when loading is complete:
+
+```
+INFO: Loading messages from result.json
+INFO: Loaded 15423 messages from JSON file
+INFO: Processing batch 1/16 (1000 messages)
+...
+INFO: Successfully loaded 15423 messages into collection my_chat
 ```
 
 Options:
 
 - `--collection`: Name of the ChromaDB collection (default: "telegram_messages")
 - `--batch-size`: Number of messages to process in each batch (default: 5000)
-- `--no-reset`: Don't reset the collection before loading
+- `--no-reset`: Don't reset the collection before loading (useful for adding new messages to an existing collection)
 
 ### Querying
 
-Ask a question about the Telegram messages:
+To ask a question about the messages:
 
 ```bash
-python main.py query "What topics were most frequently discussed?"
+python main.py query "What topics were most frequently discussed?" --collection my_chat --output answer.md
+```
+
+This will:
+
+1. Find the most relevant messages related to your question
+2. Use the Ollama LLM to generate a comprehensive answer based on those messages
+3. Save the answer to answer.md
+
+Example output in the terminal:
+
+```
+================================================================================
+Question: What topics were most frequently discussed?
+================================================================================
+Answer: Based on the conversation history, the most frequently discussed topics include:
+
+1. Project planning and development - There are numerous discussions about timelines, 
+   feature implementation, and development progress.
+
+2. Technical issues - The conversation contains many exchanges about debugging problems, 
+   code reviews, and technical solutions.
+
+3. Meeting coordination - Team members frequently discuss scheduling meetings, 
+   sharing agendas, and following up on action items.
+...
+================================================================================
+Processing time: 5.23 seconds
+Relevant messages: 1000
+================================================================================
 ```
 
 Options:
@@ -145,6 +206,40 @@ telegram_analyzer/
 └── cli.py               # Command-line interface
 ```
 
+## Data Privacy
+
+This tool is designed to run entirely locally and does not send data to any cloud providers. All processing happens on your machine, ensuring that your
+sensitive conversation data remains private. Key privacy features include:
+
+- **Local Execution**: All data processing and LLM inference runs on your local machine
+- **No Data Transmission**: No data is sent to external servers or APIs
+- **Persistent Storage Control**: You control where the data is stored on your system
+- **No Account Required**: No need to create accounts or authenticate with external services
+
+Users are responsible for ensuring that sensitive data is not uploaded to public repositories or shared inappropriately. Always be cautious when sharing
+analysis results that might contain private information.
+
+## Limitations
+
+Current limitations of the tool include:
+
+- **JSON Format Only**: Currently supports only JSON exports from Telegram Desktop
+- **Text-Only Analysis**: Media files (images, videos, audio) are not processed
+- **Local LLM Dependency**: Requires Ollama to be installed and running locally
+- **Resource Intensive**: Processing large chat histories may require significant memory and storage
+- **English-Centric**: Works best with English language content, though other languages are supported
+
+## Contributing
+
+Contributions are welcome! If you'd like to improve Telegram Analyzer, please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+For bug reports, feature requests, or questions, please open an issue in the repository.
+
 ## Improvements
 
 This application has been refactored following modern Python practices:
@@ -159,4 +254,3 @@ This application has been refactored following modern Python practices:
 8. **Batch Processing**: Support for processing multiple questions
 9. **Performance Metrics**: Timing and metadata for performance analysis
 10. **Code Quality**: Adherence to PEP 8 style guidelines
-

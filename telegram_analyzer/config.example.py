@@ -40,7 +40,7 @@ SENTENCE_MODEL: Dict[str, str] = {
     # Device to run the model on:
     # - 'cpu': Use CPU (works on all systems but slower)
     # - 'cuda': Use NVIDIA GPU (requires CUDA setup)
-    # - 'mps': Use Apple Silicon GPU (for M1/M2 Macs)
+    # - 'mps': Use Apple Silicon GPU (for M1/M2/... Macs)
     "device": "mps"
 }
 
