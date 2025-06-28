@@ -1,0 +1,6 @@
+.venv
+chromadb_data*
+telegram_analyzer.log
+telegram_analysis_results.md
+result.json
+telegram_analyzer/config.py
