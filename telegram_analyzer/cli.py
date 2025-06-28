@@ -391,9 +391,9 @@ def handle_process_queries(args: argparse.Namespace) -> int:
                 spec.loader.exec_module(module)
 
                 # Extract questionsSet from the module
-                if hasattr(module, "questionsSet"):
-                    query_sets[module_name] = module.questionsSet
-                    logger.info(f"Found query set '{module.questionsSet.title}' in {query_file}")
+                if hasattr(module, "questions_set"):
+                    query_sets[module_name] = module.questions_set
+                    logger.info(f"Found query set '{module.questions_set.title}' in {query_file}")
                 else:
                     logger.warning(f"No 'questionsSet' found in {query_file}")
             except Exception as e:

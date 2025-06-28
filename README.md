@@ -175,6 +175,55 @@ Options:
 
 - `--collection`: Name of the ChromaDB collection (default: "telegram_messages")
 
+### Processing Query Sets
+
+Process predefined sets of questions from Python files in the 'queries' folder:
+
+```bash
+python main.py process-queries
+```
+
+This command will:
+
+1. Scan the 'queries' folder for Python files containing question sets
+2. Allow you to select a specific query set or process a specified file
+3. Process each question in the selected set using the QueryProcessor
+4. Save the results to a Markdown file with the query set name and date
+
+Example output in the terminal:
+
+```
+Found 10 query file(s) to process
+
+Available query sets:
+1. Couple Queries (couple)
+   Queries for analyzing relationships between two people.
+
+2. Team Queries (team)
+   Queries for analyzing team communication and dynamics.
+
+...
+
+Select a query set (number) or 'q' to quit: 1
+Created output file: couple_results_2023-11-15.md
+Processing question 1/55: 'What did the husband and wife discuss regarding dinner plans?'
+Processed 1/55: 'What did the husband and wife discuss regarding dinner...' (3.45s)
+...
+Query set processed. Processed 55/55 questions. Results saved to couple_results_2023-11-15.md
+```
+
+The output file will contain:
+- The title and description of the query set
+- The date of analysis
+- Each question followed by its answer
+
+Options:
+
+- `--file`: Specific query file to process (default: interactive selection)
+- `--collection`: Name of the ChromaDB collection (default: "telegram_messages")
+- `--model`: Name of the Ollama model (default: "deepseek-r1:32b-qwen-distill-q8_0")
+- `--top-k`: Number of relevant messages to include in the context (default: 1000)
+
 ## Configuration
 
 The application uses a configuration file located at `telegram_analyzer/config.py`. To set up your configuration:
